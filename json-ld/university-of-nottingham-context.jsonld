@@ -1,0 +1,56 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "uon": "https://www.nottingham.ac.uk/#vocab/",
+    "oai": "http://www.openarchives.org/OAI/2.0/",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "name": "name",
+    "url": "url",
+    "description": "description",
+    "sameAs": "sameAs",
+    "identifier": "identifier",
+    "CollegeOrUniversity": "CollegeOrUniversity",
+    "repository": {
+      "@id": "uon:repository",
+      "@type": "@id"
+    },
+    "api": {
+      "@id": "uon:api",
+      "@type": "@id"
+    },
+    "baseURL": {
+      "@id": "uon:baseURL",
+      "@type": "@id"
+    },
+    "humanURL": {
+      "@id": "uon:humanURL",
+      "@type": "@id"
+    },
+    "metadataPrefix": "oai:metadataPrefix",
+    "dublinCore": "dc:"
+  },
+  "@type": "CollegeOrUniversity",
+  "name": "University of Nottingham",
+  "url": "https://www.nottingham.ac.uk/",
+  "description": "Public research university in Nottingham, United Kingdom, operating Repository@Nottingham (Worktribe) which exposes a publicly accessible OAI-PMH metadata-harvesting interface for research outputs.",
+  "sameAs": [
+    "https://github.com/UniversityOfNottingham",
+    "https://github.com/Health-Informatics-UoN",
+    "https://www.linkedin.com/school/university-of-nottingham/",
+    "https://twitter.com/UniofNottingham"
+  ],
+  "api": [
+    {
+      "@type": "WebAPI",
+      "name": "Repository@Nottingham OAI-PMH",
+      "humanURL": "https://nottingham-repository.worktribe.com/",
+      "baseURL": "https://nottingham-repository.worktribe.com/oaiprovider",
+      "metadataPrefix": "oai_dc"
+    },
+    {
+      "@type": "WebAPI",
+      "name": "Nottingham ePrints / eTheses OAI-PMH (gated)",
+      "humanURL": "http://eprints.nottingham.ac.uk/"
+    }
+  ]
+}
