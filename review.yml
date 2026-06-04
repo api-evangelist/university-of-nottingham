@@ -1,0 +1,47 @@
+---
+name: University of Nottingham
+description: University of Nottingham public developer/API footprint review for APIs.json cataloging.
+url: https://raw.githubusercontent.com/api-evangelist/university-of-nottingham/refs/heads/main/review.yml
+created: '2026-06-03'
+modified: '2026-06-03'
+reviews:
+  - date: '2026-06-03'
+    rating: 2
+    summary: >-
+      The University of Nottingham exposes one confirmed-live public machine
+      interface: the Repository@Nottingham OAI-PMH endpoint (Worktribe), which
+      returned valid OAI-PMH XML to a direct Identify request. The legacy
+      EPrints / eTheses OAI-PMH endpoints are documented but now sit behind an
+      AWS WAF human-verification challenge and did not return harvestable
+      metadata, so they are cataloged honestly as gated. No general-purpose
+      developer portal or open-data API portal was found; student records,
+      timetabling, library discovery, and identity systems are behind SSO. Three
+      official GitHub organizations were verified. No endpoints were fabricated.
+    endpoints:
+      - url: https://www.nottingham.ac.uk/
+        status: 200
+        note: Official institution website, live.
+      - url: https://nottingham-repository.worktribe.com/oaiprovider?verb=Identify
+        status: 200
+        note: Repository@Nottingham OAI-PMH; live, returns valid OAI-PMH XML.
+      - url: http://eprints.nottingham.ac.uk/perl/oai2?verb=Identify
+        status: 405
+        note: Legacy EPrints OAI-PMH; AWS WAF human-verification challenge, gated.
+      - url: http://etheses.nottingham.ac.uk/perl/oai2?verb=Identify
+        status: 405
+        note: Legacy eTheses OAI-PMH; AWS WAF challenge, gated.
+      - url: https://www.nottingham.ac.uk/dts/
+        status: 200
+        note: Digital and Technology Services; informational, not a developer API portal.
+      - url: https://github.com/UniversityOfNottingham
+        status: 200
+        note: Official GitHub org, 24 public repos, verified via GitHub API.
+      - url: https://github.com/Health-Informatics-UoN
+        status: 200
+        note: Official Health Informatics GitHub org, 46 public repos.
+      - url: https://www.linkedin.com/school/university-of-nottingham/
+        status: 999
+        note: Official LinkedIn school page; 999 is LinkedIn anti-bot, page exists.
+      - url: https://twitter.com/UniofNottingham
+        status: 200
+        note: Official Twitter/X account.
