@@ -1,16 +1,28 @@
 ---
 aid: university-of-nottingham
 name: University of Nottingham
+x-type: university
+x-category: Public Research University
 description: >-
   The University of Nottingham is a public research university in Nottingham,
-  United Kingdom, ranked #71 in the QS World University Rankings 2025. As a
-  research-intensive institution it operates Repository@Nottingham (powered by
-  Worktribe) which exposes a publicly accessible OAI-PMH metadata-harvesting
-  interface for its research outputs, alongside legacy EPrints repositories
-  (Nottingham ePrints, eTheses). Most institutional systems (student records,
-  timetabling, library discovery, identity) are gated behind SSO and are not
-  publicly documented developer APIs. The university maintains several official
-  GitHub organizations publishing open-source code.
+  United Kingdom — a founding Russell Group member with campuses in the UK,
+  Malaysia (UNM) and Ningbo, China (UNNC). It runs no public developer portal
+  and publishes no OpenAPI, and this profile does not pretend otherwise. What it
+  does operate, on its own nottingham.ac.uk hosts, is three genuinely
+  institution-run machine surfaces: a self-hosted DSpace 8.2 / DSpace-CRIS
+  repository at repository.nottingham.ac.uk exposing a keyless read-only
+  HAL+JSON REST API and an OAI-PMH 2.0 provider (oai_dc, qdc, mets, rdf, dim,
+  etdms, uketd_dc and RIOXX v3.0, plus an OpenAIRE CERIF 1.1 base URL), and a
+  Shibboleth SAML 2.0 identity provider registered in the UK Access Management
+  Federation for all three campuses. Its ORCID member integration and its
+  DataCite prefix 10.17639 (1,609 DOIs resolving to its own repository) are
+  verifiable from public endpoints. Alongside these it is a tenant on two vendor
+  platforms — a Worktribe-hosted Repository@Nottingham OAI-PMH interface and Ex
+  Libris Alma/Primo VE library discovery (NUsearch) — whose contracts belong to
+  those vendors, not to Nottingham. Student records, timetabling, module
+  enrolment and the VLE are behind SSO and are not publicly documented APIs.
+  Notably, the repository's human Angular UI is behind an AWS WAF
+  human-verification challenge while its machine API is entirely open.
 type: Index
 deliveryModel:
   model: saas
@@ -43,58 +55,171 @@ tags:
   - Education
   - Higher Education
   - University
+  - Russell Group
+  - United Kingdom
   - Research
+  - Research Repository
   - Open Access
   - OAI-PMH
-  - United Kingdom
+  - Identity Federation
+  - Library
+  - Research Computing
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-08-30'
 specificationVersion: '0.23'
 apis:
-  - aid: university-of-nottingham:repository-oai
-    name: Repository@Nottingham OAI-PMH
+  - aid: university-of-nottingham:repository-rest
+    name: Repository@Nottingham DSpace REST API
+    x-operator: institution
     description: >-
-      Publicly accessible OAI-PMH (Open Archives Initiative Protocol for
-      Metadata Harvesting) interface for Repository@Nottingham, the university's
-      institutional research repository powered by Worktribe. Supports standard
-      OAI-PMH verbs (Identify, ListRecords, ListMetadataFormats, etc.) returning
-      Dublin Core and other metadata for research outputs. Confirmed live
-      returning valid OAI-PMH XML.
-    humanURL: https://nottingham-repository.worktribe.com/
-    baseURL: https://nottingham-repository.worktribe.com/oaiprovider
-    tags: [ Repository, OAI-PMH, Research, Open Access, Metadata ]
+      Keyless, read-only HAL+JSON REST API of the university's self-hosted
+      DSpace 8.2 / DSpace-CRIS (cris-2024.02.04) institutional repository, served
+      from the university's own domain at repository.nottingham.ac.uk/server/api.
+      The root document advertises the full DSpace link set — core/communities,
+      core/collections, core/items, core/bitstreams, discover/search/objects,
+      discover/browses, config/properties, statistics and authn. Verified live on
+      2026-08-30: GET /server/api returns 200 application/hal+json naming
+      "University of Nottingham Repository"; GET /server/api/core/communities and
+      GET /server/api/discover/search/objects both return 200 with real records.
+      The contract itself is the DSpace product's, shared by every DSpace
+      deployment — so no OpenAPI is saved under this institution — but the
+      deployment, the host and the data are Nottingham's. The Angular human UI on
+      the same host is behind an AWS WAF human-verification challenge (405) while
+      this API path is open.
+    humanURL: https://www.nottingham.ac.uk/library/research/open-access/
+    baseURL: https://repository.nottingham.ac.uk/server/api
+    tags: [ Research Repository, DSpace, REST, Open Access, Metadata ]
+    properties:
+      - type: APIReference
+        url: https://repository.nottingham.ac.uk/server/api
+  - aid: university-of-nottingham:repository-dspace-oai
+    name: Repository@Nottingham OAI-PMH (DSpace, institution-hosted)
+    x-operator: institution
+    description: >-
+      OAI-PMH 2.0 metadata-harvesting provider of the institution-hosted DSpace
+      repository. Verified live 2026-08-30 — verb=Identify returns 200 text/xml
+      with repositoryName "University of Nottingham Repository",
+      repositoryIdentifier repository.nottingham.ac.uk and an OpenAIRE CERIF 1.1
+      Compatibility block naming a second base URL at /server/oai/openairecris.
+      verb=ListMetadataFormats returns eight prefixes including RIOXX v3.0 and
+      uketd_dc (the UK EThOS thesis profile); verb=ListSets enumerates community
+      and collection sets covering Nottingham eTheses, eDissertations (UK and
+      UNM) and the CRIS. This is the endpoint that succeeded the retired
+      EPrints OAI-PMH interfaces at eprints./etheses.nottingham.ac.uk, which now
+      301 into this host.
+    humanURL: https://www.nottingham.ac.uk/library/research/
+    baseURL: https://repository.nottingham.ac.uk/server/oai/request
+    tags: [ Research Repository, OAI-PMH, DSpace, RIOXX, Open Access ]
     properties:
       - type: Documentation
         url: https://www.openarchives.org/OAI/openarchivesprotocol.html
-  - aid: university-of-nottingham:eprints-oai
-    name: Nottingham ePrints / eTheses OAI-PMH (gated)
+      - type: Conformance
+        url: conformance/university-of-nottingham-conformance.yml
+  - aid: university-of-nottingham:identity-federation
+    name: University of Nottingham Shibboleth Identity Provider (UK Access Management Federation)
+    x-operator: institution
     description: >-
-      Legacy EPrints repositories (Nottingham ePrints, Nottingham eTheses,
-      Nottingham eDissertations) historically exposed OAI-PMH endpoints at
-      /perl/oai2. As of verification these endpoints are protected by an AWS WAF
-      human-verification challenge and do not return harvestable metadata over a
-      direct programmatic request, so they are documented here as gated rather
-      than openly available.
-    humanURL: http://eprints.nottingham.ac.uk/
-    tags: [ Repository, OAI-PMH, EPrints, Research, Gated ]
+      Institution-operated Shibboleth SAML 2.0 identity provider, registered and
+      published as machine-readable metadata in the UK Access Management
+      Federation aggregate. EntityID https://idp.nottingham.ac.uk/shibboleth,
+      DisplayName "University of Nottingham", with SSO endpoints under
+      /shibboleth-idp/profile/SAML2/{POST,POST-SimpleSign,Redirect}/SSO and
+      SOAP artifact resolution on port 8443. Two further campus IdPs are
+      registered — https://idp.nottingham.edu.my/idp/shibboleth (Malaysia) and
+      https://idp.nottingham.edu.cn/idp/shibboleth (Ningbo, China) — along with
+      institution-operated SAML service providers for the DSpace repository
+      (rdmc.nottingham.ac.uk), the Survey of English Place-Names
+      (epns.nottingham.ac.uk, simpleSAMLphp) and International Human Rights
+      Reports (ihrr.nottingham.ac.uk). Non-production entities (testidp., devidp.,
+      rdmc-test.) also appear in the aggregate and are excluded as placeholders.
+      This is a real, machine-readable, institution-run surface and it is the one
+      class of university API that is almost never catalogued.
+    humanURL: https://www.ukfederation.org.uk/
+    baseURL: https://idp.nottingham.ac.uk/shibboleth-idp/profile/SAML2/Redirect/SSO
+    tags: [ Identity Federation, SAML, Shibboleth, Single Sign-On, Authentication ]
     properties:
       - type: Documentation
-        url: http://eprints.nottingham.ac.uk/information.html
+        url: https://www.ukfederation.org.uk/
+      - type: Conformance
+        url: conformance/university-of-nottingham-conformance.yml
+  - aid: university-of-nottingham:repository-oai
+    name: Repository@Nottingham OAI-PMH (Worktribe tenant)
+    x-operator: tenant
+    description: >-
+      OAI-PMH 2.0 interface for the Worktribe-hosted Repository@Nottingham
+      research-outputs showcase. Confirmed live 2026-08-30 — verb=Identify
+      returns 200 with repositoryName "Repository@Nottingham", adminEmail
+      discovery-access-systems@nottingham.ac.uk and sample identifier
+      oai:nottingham-repository.worktribe.com:702877; verb=ListMetadataFormats
+      returns oai_dc, rioxx and uketd_dc. nottingham-repository.worktribe.com is
+      an institution-specific subdomain on Worktribe's platform: the metadata and
+      the research outputs are Nottingham's, the software and the contract are
+      Worktribe's. Recorded here as a tenant relationship — a real institutional
+      fact — rather than credited to Nottingham as its own engineering. No
+      Worktribe contract is saved under this institution.
+    humanURL: https://nottingham-repository.worktribe.com/
+    baseURL: https://nottingham-repository.worktribe.com/oaiprovider
+    tags: [ Research Repository, OAI-PMH, Worktribe, Tenant, Open Access ]
+    properties:
+      - type: Documentation
+        url: https://www.openarchives.org/OAI/openarchivesprotocol.html
+  - aid: university-of-nottingham:library-discovery
+    name: NUsearch library discovery (Ex Libris Alma / Primo VE tenant)
+    x-operator: tenant
+    description: >-
+      Library discovery and resource management on Ex Libris Alma and Primo VE,
+      operated as a Nottingham tenant across all three campuses. Registered in
+      the UK Access Management Federation as SAML service providers
+      https://nusearch.nottingham.ac.uk/mng/login ("University of Nottingham (UK
+      campus) – Primo"), plus nottingham-uk.alma.exlibrisgroup.com,
+      nottingham-my.* and nottingham-cn.*.cn equivalents for the Malaysia and
+      China campuses. nusearch.nottingham.ac.uk/ resolves 200 to
+      /discovery/search?vid=44NOTTS_UNUK:44NOTUK. The discovery and Alma APIs
+      belong to Ex Libris and are not saved here; only the tenant relationship is
+      recorded.
+    humanURL: https://nusearch.nottingham.ac.uk/
+    tags: [ Library, Discovery, Ex Libris, Primo, Alma, Tenant ]
 common:
-  - type: DomainSecurity
-    url: security/university-of-nottingham-domain-security.yml
   - type: Website
     url: https://www.nottingham.ac.uk/
-  - type: DeveloperPortal
-    url: https://www.nottingham.ac.uk/dts/
+  - type: APIReference
+    url: https://repository.nottingham.ac.uk/server/api
+  - type: ResearchRepository
+    url: https://www.nottingham.ac.uk/library/research/open-access/
+  - type: LibraryCatalog
+    url: https://nusearch.nottingham.ac.uk/
+  - type: IdentityFederation
+    url: https://www.ukfederation.org.uk/
+  - type: OpenData
+    url: https://citydataconnector.nottingham.ac.uk/
+  - type: ResearchComputing
+    url: https://digitalresearch.nottingham.ac.uk/
+  - type: AIPolicy
+    url: https://www.nottingham.ac.uk/studyingeffectively/ai/ai.aspx
+  - type: Documentation
+    url: https://www.nottingham.ac.uk/research/open-research/open-research.aspx
   - type: GitHub
     url: https://github.com/UniversityOfNottingham
   - type: SourceCode
     url: https://github.com/Health-Informatics-UoN
+  - type: GitHubOrganization
+    url: https://github.com/Nottingham-CTU
+  - type: Support
+    url: https://www.nottingham.ac.uk/dts/help/it-support.aspx
+  - type: TermsOfService
+    url: https://www.nottingham.ac.uk/utilities/terms.aspx
+  - type: PrivacyPolicy
+    url: https://www.nottingham.ac.uk/utilities/privacy/privacy.aspx
+  - type: BlogRSS
+    url: https://digitalresearch.nottingham.ac.uk/feed/
   - type: LinkedIn
     url: https://www.linkedin.com/school/university-of-nottingham/
   - type: Twitter
     url: https://twitter.com/UniofNottingham
+  - type: Conformance
+    url: conformance/university-of-nottingham-conformance.yml
+  - type: DomainSecurity
+    url: security/university-of-nottingham-domain-security.yml
   - type: Plans
     url: plans/university-of-nottingham-plans-pricing.yml
   - type: RateLimits
@@ -103,6 +228,69 @@ common:
     url: finops/university-of-nottingham-finops.yml
   - type: Review
     url: review.yml
+x-coverage:
+  state: covered
+  reason: covered
+  detail: >-
+    Three institution-operated machine surfaces were found and verified live on
+    2026-08-30 — a DSpace 8.2 REST API and an OAI-PMH 2.0 provider on
+    repository.nottingham.ac.uk, and a Shibboleth SAML 2.0 identity provider
+    published in the UK Access Management Federation metadata aggregate — plus
+    five education-regime domain standards evidenced from public endpoints
+    (oai-pmh, shibboleth, saml, orcid, datacite). Two vendor platforms are
+    recorded as tenant relationships rather than as Nottingham contracts:
+    Worktribe (Repository@Nottingham) and Ex Libris Alma/Primo VE (NUsearch). No
+    OpenAPI, no developer portal and no self-service key issuance exist anywhere
+    on the institution's public surface, and no contract has been generated to
+    stand in for one: the DSpace and OAI-PMH contracts are product contracts
+    shared by every deployment of that software and belong in the vendor's own
+    repo, not here. The legacy EPrints OAI-PMH endpoints previously catalogued
+    (eprints. and etheses.nottingham.ac.uk /perl/oai2) now 301 into
+    repository.nottingham.ac.uk and are removed. Student records, timetabling,
+    module enrolment and the VLE sit behind SSO and were not probeable.
+  generated: '2026-08-30'
+  method: probed
+  evidence:
+    - url: https://repository.nottingham.ac.uk/server/api
+      status: 200
+    - url: https://repository.nottingham.ac.uk/server/api/core/communities?size=2
+      status: 200
+    - url: https://repository.nottingham.ac.uk/server/api/discover/search/objects?size=1
+      status: 200
+    - url: https://repository.nottingham.ac.uk/server/oai/request?verb=Identify
+      status: 200
+    - url: https://repository.nottingham.ac.uk/server/oai/request?verb=ListMetadataFormats
+      status: 200
+    - url: https://repository.nottingham.ac.uk/server/oai/request?verb=ListSets
+      status: 200
+    - url: https://repository.nottingham.ac.uk/server/oai/openairecris?verb=Identify
+      status: 200
+    - url: https://repository.nottingham.ac.uk/server/api/config/properties/orcid.application-client-id
+      status: 200
+    - url: http://metadata.ukfederation.org.uk/ukfederation-metadata.xml
+      status: 200
+    - url: https://idp.nottingham.ac.uk/shibboleth-idp/profile/SAML2/Redirect/SSO
+      status: 400
+    - url: https://api.datacite.org/prefixes/10.17639
+      status: 200
+    - url: https://api.datacite.org/dois?prefix=10.17639
+      status: 200
+    - url: https://nottingham-repository.worktribe.com/oaiprovider?verb=Identify
+      status: 200
+    - url: https://nusearch.nottingham.ac.uk/
+      status: 200
+    - url: https://repository.nottingham.ac.uk/
+      status: 405
+    - url: https://eprints.nottingham.ac.uk/perl/oai2?verb=Identify
+      status: 405
+    - url: https://www.nottingham.ac.uk/llms.txt
+      status: 404
+    - url: https://www.nottingham.ac.uk/.well-known/security.txt
+      status: 404
+    - url: https://citydataconnector.nottingham.ac.uk/api/3/action/package_list
+      status: 404
+    - url: https://api.crossref.org/members?query=university+of+nottingham
+      status: 200
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
