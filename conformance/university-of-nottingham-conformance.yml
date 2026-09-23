@@ -1,0 +1,115 @@
+generated: '2026-08-30'
+method: probed
+source: >-
+  Live probes of University of Nottingham institution-operated hosts on 2026-08-30, plus the
+  UK Access Management Federation SAML metadata aggregate and the DataCite REST API.
+docs: https://www.nottingham.ac.uk/research/open-research/open-research.aspx
+note: >-
+  Conformance against the Kin Score `education` regime standards[]. Every entry below was reached
+  by fetching the named URL and reading the response body — none is a prose claim from a
+  university web page. Standards the institution does not publicly expose are recorded as
+  conforms:false with the negative probe that established it, and are never inferred from the
+  presence of a vendor product. The two OAI-PMH endpoints, the Shibboleth IdP, the ORCID
+  integration and the DataCite prefix are all institution-operated; the Ex Libris Alma/Primo and
+  Worktribe surfaces are tenant deployments and were deliberately NOT used as conformance evidence
+  for this institution.
+standards:
+- id: oai-pmh
+  conforms: true
+  operator: institution
+  evidence: >-
+    Two live OAI-PMH 2.0 providers. Institution-hosted DSpace 8.2:
+    https://repository.nottingham.ac.uk/server/oai/request?verb=Identify returns 200 text/xml with
+    repositoryName "University of Nottingham Repository", repositoryIdentifier
+    repository.nottingham.ac.uk, granularity YYYY-MM-DDThh:mm:ssZ and an OpenAIRE CERIF 1.1
+    Compatibility description naming a second base URL
+    https://repository.nottingham.ac.uk/server/oai/openairecris (also 200). verb=ListMetadataFormats
+    returns eight prefixes — oai_dc, qdc, mets, rdf, dim, etdms, uketd_dc (EThOS) and rioxx (RIOXX
+    v3.0). verb=ListSets enumerates community/collection sets including com_10.17639_1 and
+    col_123456789_edissertations_malaysia.
+- id: shibboleth
+  conforms: true
+  operator: institution
+  evidence: >-
+    Shibboleth Identity Provider registered in the UK Access Management Federation metadata
+    aggregate (http://metadata.ukfederation.org.uk/ukfederation-metadata.xml, 87,852,408 bytes,
+    fetched 2026-08-30). EntityDescriptor entityID="https://idp.nottingham.ac.uk/shibboleth",
+    mdui:DisplayName "University of Nottingham", IDPSSODescriptor with SSO endpoints under
+    https://idp.nottingham.ac.uk/shibboleth-idp/profile/SAML2/{POST,POST-SimpleSign,Redirect}/SSO
+    and ArtifactResolution on port 8443. The Redirect/SSO endpoint returns 400 to a parameterless
+    GET, which is a live Shibboleth IdP rejecting a malformed AuthnRequest. Two further campus IdPs
+    are registered: https://idp.nottingham.edu.my/idp/shibboleth (Malaysia) and
+    https://idp.nottingham.edu.cn/idp/shibboleth (Ningbo, China), both also 400 on a bare GET.
+- id: saml
+  conforms: true
+  operator: institution
+  evidence: >-
+    SAML 2.0 throughout the same federation metadata — bindings urn:oasis:names:tc:SAML:2.0:bindings
+    HTTP-POST, HTTP-POST-SimpleSign, HTTP-Redirect and SOAP on the UK IdP; the Malaysia and China
+    IdPs additionally carry SAML 1.0 SOAP and AttributeAuthorityDescriptor roles. Institution-operated
+    SAML service providers are also registered: https://rdmc.nottingham.ac.uk/shibboleth (DisplayName
+    "DSPACE"), https://epns.nottingham.ac.uk/simplesaml/module.php/saml/sp/metadata.php/default-sp
+    (Survey of English Place-Names, simpleSAMLphp) and https://ihrr.nottingham.ac.uk/shibboleth.
+    Non-production entities (testidp., devidp., rdmc-test.) are present in the aggregate and are
+    excluded here as placeholders.
+- id: orcid
+  conforms: true
+  operator: institution
+  evidence: >-
+    The institution-hosted DSpace-CRIS (cris-2024.02.04) exposes its ORCID member integration
+    configuration publicly at
+    https://repository.nottingham.ac.uk/server/api/config/properties/orcid.application-client-id
+    (200, application/hal+json), returning client id APP-NETTHMK3BB3SW6KV. Item records returned by
+    https://repository.nottingham.ac.uk/server/api/discover/search/objects carry cris.virtual.orcid
+    and cris.virtualsource.orcid metadata fields, i.e. ORCID iDs are bound to CRIS person entities
+    rather than typed as free text.
+- id: datacite
+  conforms: true
+  operator: institution
+  evidence: >-
+    DataCite member. https://api.datacite.org/clients?query=nottingham returns client bl.notts
+    "University of Nottingham"; https://api.datacite.org/providers?query=nottingham returns provider
+    frvi "University of Nottingham" (website https://www.nottingham.ac.uk/library).
+    https://api.datacite.org/prefixes/10.17639 links prefix 10.17639 to client bl.notts and provider
+    frvi. https://api.datacite.org/dois?prefix=10.17639 reports meta.total 1609 DOIs, the first of
+    which (10.17639/nott.37108) resolves to https://repository.nottingham.ac.uk/handle/123456789/87204
+    — i.e. the DOIs are minted against the institution's own repository, not a vendor host.
+- id: crossref
+  conforms: false
+  operator: none
+  evidence: >-
+    https://api.crossref.org/members?query=university+of+nottingham returns no member record for the
+    institution. No Crossref DOI prefix is asserted on any Nottingham host.
+- id: scim
+  conforms: false
+  operator: none
+  evidence: >-
+    No SCIM 2.0 service provider configuration is publicly reachable. /ServiceProviderConfig and
+    /scim/v2 return nothing on the institution's public hosts; identity provisioning is behind SSO.
+- id: lti
+  conforms: false
+  operator: vendor-gated
+  evidence: >-
+    No publicly reachable LTI 1.3 platform configuration or JWKS on a nottingham.ac.uk host. The VLE
+    (Moodle) is behind SSO, so any LTI conformance would belong to the VLE vendor's deployment and is
+    not attributable to the institution from the public surface.
+- id: oneroster
+  conforms: false
+  operator: none
+  evidence: No 1EdTech OneRoster endpoint or roster export is published on any public institution host.
+- id: ed-fi
+  conforms: false
+  operator: none
+  evidence: >-
+    Ed-Fi is a US K-12 / state-agency data standard and has no deployment on a UK higher-education
+    institution. No Ed-Fi ODS endpoint found.
+- id: caliper
+  conforms: false
+  operator: none
+  evidence: No 1EdTech Caliper Analytics event store or sensor endpoint is publicly exposed.
+- id: qti
+  conforms: false
+  operator: none
+  evidence: >-
+    No QTI item bank or QTI content package is served from a public institution host; assessment
+    content sits inside the SSO-gated VLE.

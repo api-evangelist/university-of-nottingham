@@ -27,12 +27,15 @@
       "@type": "@id"
     },
     "metadataPrefix": "oai:metadataPrefix",
-    "dublinCore": "dc:"
+    "dublinCore": "dc:",
+    "operator": {
+      "@id": "uon:operator"
+    }
   },
   "@type": "CollegeOrUniversity",
   "name": "University of Nottingham",
   "url": "https://www.nottingham.ac.uk/",
-  "description": "Public research university in Nottingham, United Kingdom, operating Repository@Nottingham (Worktribe) which exposes a publicly accessible OAI-PMH metadata-harvesting interface for research outputs.",
+  "description": "Public research university in Nottingham, United Kingdom. Operates three institution-run machine surfaces on its own hosts — a self-hosted DSpace 8.2 / DSpace-CRIS repository REST API and OAI-PMH 2.0 provider at repository.nottingham.ac.uk, and a Shibboleth SAML 2.0 identity provider registered in the UK Access Management Federation — alongside tenant deployments on Worktribe (Repository@Nottingham) and Ex Libris Alma/Primo VE (NUsearch). No public developer portal or OpenAPI.",
   "sameAs": [
     "https://github.com/UniversityOfNottingham",
     "https://github.com/Health-Informatics-UoN",
@@ -42,15 +45,39 @@
   "api": [
     {
       "@type": "WebAPI",
-      "name": "Repository@Nottingham OAI-PMH",
+      "name": "Repository@Nottingham DSpace REST API",
+      "operator": "institution",
+      "humanURL": "https://www.nottingham.ac.uk/library/research/open-access/",
+      "baseURL": "https://repository.nottingham.ac.uk/server/api"
+    },
+    {
+      "@type": "WebAPI",
+      "name": "Repository@Nottingham OAI-PMH (DSpace, institution-hosted)",
+      "operator": "institution",
+      "humanURL": "https://www.nottingham.ac.uk/library/research/",
+      "baseURL": "https://repository.nottingham.ac.uk/server/oai/request",
+      "metadataPrefix": "oai_dc"
+    },
+    {
+      "@type": "WebAPI",
+      "name": "University of Nottingham Shibboleth Identity Provider (UK Access Management Federation)",
+      "operator": "institution",
+      "humanURL": "https://www.ukfederation.org.uk/",
+      "baseURL": "https://idp.nottingham.ac.uk/shibboleth-idp/profile/SAML2/Redirect/SSO"
+    },
+    {
+      "@type": "WebAPI",
+      "name": "Repository@Nottingham OAI-PMH (Worktribe tenant)",
+      "operator": "tenant",
       "humanURL": "https://nottingham-repository.worktribe.com/",
       "baseURL": "https://nottingham-repository.worktribe.com/oaiprovider",
       "metadataPrefix": "oai_dc"
     },
     {
       "@type": "WebAPI",
-      "name": "Nottingham ePrints / eTheses OAI-PMH (gated)",
-      "humanURL": "http://eprints.nottingham.ac.uk/"
+      "name": "NUsearch library discovery (Ex Libris Alma / Primo VE tenant)",
+      "operator": "tenant",
+      "humanURL": "https://nusearch.nottingham.ac.uk/"
     }
   ]
 }

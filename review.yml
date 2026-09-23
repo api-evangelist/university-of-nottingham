@@ -3,8 +3,116 @@ name: University of Nottingham
 description: University of Nottingham public developer/API footprint review for APIs.json cataloging.
 url: https://raw.githubusercontent.com/api-evangelist/university-of-nottingham/refs/heads/main/review.yml
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-08-30'
 reviews:
+  - date: '2026-08-30'
+    rating: 3
+    summary: >-
+      University-pipeline re-profile with operator attribution settled before anything was saved.
+      Three institution-operated machine surfaces were confirmed live on the university's own
+      nottingham.ac.uk hosts: a self-hosted DSpace 8.2 / DSpace-CRIS (cris-2024.02.04) repository
+      at repository.nottingham.ac.uk exposing a keyless HAL+JSON REST API at /server/api; its
+      OAI-PMH 2.0 provider at /server/oai/request advertising eight metadata formats including
+      RIOXX v3.0, uketd_dc and an OpenAIRE CERIF 1.1 base URL; and a Shibboleth SAML 2.0 identity
+      provider (entityID https://idp.nottingham.ac.uk/shibboleth) published in the UK Access
+      Management Federation metadata aggregate, with sibling IdPs for the Malaysia and Ningbo
+      campuses. Five education-regime domain standards are evidenced from public endpoints —
+      oai-pmh, shibboleth, saml, orcid (DSpace-CRIS ORCID client APP-NETTHMK3BB3SW6KV exposed at
+      /server/api/config/properties) and datacite (DataCite provider frvi / client bl.notts, prefix
+      10.17639, 1,609 DOIs resolving into the repository). Crossref returns no member record and is
+      recorded as false. Two vendor platforms are recorded as TENANT relationships and their
+      contracts were not saved here: Worktribe (nottingham-repository.worktribe.com OAI-PMH,
+      adminEmail discovery-access-systems@nottingham.ac.uk) and Ex Libris Alma/Primo VE (NUsearch,
+      registered as a SAML SP for all three campuses). The previously catalogued legacy EPrints /
+      eTheses OAI-PMH endpoints are gone: eprints. and etheses.nottingham.ac.uk now 301 into
+      repository.nottingham.ac.uk, so that entry was removed rather than left as a dead claim. The
+      prior DeveloperPortal pointer at /dts/ was also removed — DTS is an IT-services page, not a
+      developer portal, and the university operates none. No OpenAPI was generated: the DSpace and
+      OAI-PMH contracts are product contracts every deployment shares and belong in the vendor's
+      own repo. One notable asymmetry: the repository's human Angular UI is behind an AWS WAF
+      human-verification challenge (405) while its machine API answers openly.
+    endpoints:
+      - url: https://www.nottingham.ac.uk/
+        status: 200
+        note: Official institution website, live.
+      - url: https://repository.nottingham.ac.uk/server/api
+        status: 200
+        note: DSpace 8.2 REST root, application/hal+json, "University of Nottingham Repository"; institution-hosted.
+      - url: https://repository.nottingham.ac.uk/server/api/core/communities?size=2
+        status: 200
+        note: Keyless read of repository communities; real records returned.
+      - url: https://repository.nottingham.ac.uk/server/api/discover/search/objects?size=1
+        status: 200
+        note: Discovery search returns items with cris.virtual.orcid metadata.
+      - url: https://repository.nottingham.ac.uk/server/oai/request?verb=Identify
+        status: 200
+        note: OAI-PMH 2.0, repositoryIdentifier repository.nottingham.ac.uk, OpenAIRE CERIF 1.1.
+      - url: https://repository.nottingham.ac.uk/server/oai/request?verb=ListMetadataFormats
+        status: 200
+        note: Eight prefixes — oai_dc, qdc, mets, rdf, dim, etdms, uketd_dc, rioxx (v3.0).
+      - url: https://repository.nottingham.ac.uk/server/oai/openairecris?verb=Identify
+        status: 200
+        note: Second OAI base URL advertised by the Identify response; live.
+      - url: https://repository.nottingham.ac.uk/server/api/config/properties/orcid.application-client-id
+        status: 200
+        note: ORCID member integration client id APP-NETTHMK3BB3SW6KV, publicly readable.
+      - url: https://repository.nottingham.ac.uk/
+        status: 405
+        note: Angular human UI behind AWS WAF human-verification challenge; the API paths are open.
+      - url: https://eprints.nottingham.ac.uk/perl/oai2?verb=Identify
+        status: 405
+        note: Legacy EPrints OAI-PMH; now 301s to repository.nottingham.ac.uk and WAF-challenged. Removed from apis.yml.
+      - url: http://metadata.ukfederation.org.uk/ukfederation-metadata.xml
+        status: 200
+        note: UK Access Management Federation aggregate, 87.85 MB; carries the Nottingham IdP and SP entity descriptors.
+      - url: https://idp.nottingham.ac.uk/shibboleth-idp/profile/SAML2/Redirect/SSO
+        status: 400
+        note: Live Shibboleth IdP rejecting a parameterless AuthnRequest; endpoint exists.
+      - url: https://idp.nottingham.edu.my/idp/profile/SAML2/Redirect/SSO
+        status: 400
+        note: Malaysia campus IdP, same behaviour.
+      - url: https://idp.nottingham.edu.cn/idp/profile/SAML2/Redirect/SSO
+        status: 400
+        note: Ningbo China campus IdP, same behaviour.
+      - url: https://api.datacite.org/prefixes/10.17639
+        status: 200
+        note: Prefix linked to DataCite client bl.notts and provider frvi (University of Nottingham).
+      - url: https://api.datacite.org/dois?prefix=10.17639
+        status: 200
+        note: meta.total 1609 DOIs; first resolves to repository.nottingham.ac.uk/handle/123456789/87204.
+      - url: https://api.crossref.org/members?query=university+of+nottingham
+        status: 200
+        note: No Crossref member record; crossref recorded conforms:false.
+      - url: https://nottingham-repository.worktribe.com/oaiprovider?verb=Identify
+        status: 200
+        note: Worktribe TENANT OAI-PMH; Nottingham's data, Worktribe's contract. Relationship recorded, spec not saved.
+      - url: https://nusearch.nottingham.ac.uk/
+        status: 200
+        note: Ex Libris Primo VE, redirects to /discovery/search?vid=44NOTTS_UNUK:44NOTUK. Tenant.
+      - url: https://citydataconnector.nottingham.ac.uk/
+        status: 200
+        note: City Data Connector dataset catalogue, institution-hosted; no public API (CKAN/Socrata paths 404).
+      - url: https://digitalresearch.nottingham.ac.uk/feed/
+        status: 200
+        note: Digital Research Service RSS, application/rss+xml; the one live institution blog feed found.
+      - url: https://www.nottingham.ac.uk/studyingeffectively/ai/ai.aspx
+        status: 200
+        note: Institutional generative-AI guidance; governance document, not an API.
+      - url: https://www.nottingham.ac.uk/llms.txt
+        status: 404
+        note: No llms.txt.
+      - url: https://www.nottingham.ac.uk/.well-known/security.txt
+        status: 404
+        note: No RFC 9116 security.txt.
+      - url: https://github.com/UniversityOfNottingham
+        status: 200
+        note: Official GitHub org.
+      - url: https://github.com/Health-Informatics-UoN
+        status: 200
+        note: Official Health Informatics GitHub org.
+      - url: https://github.com/Nottingham-CTU
+        status: 200
+        note: Nottingham Clinical Trials Unit GitHub org, 24 repos, blog nottingham.ac.uk/nctu/.
   - date: '2026-06-03'
     rating: 2
     summary: >-
